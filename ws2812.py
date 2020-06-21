@@ -97,6 +97,8 @@ if __name__=="__main__":
         #switch all nLED chips OFF.
         write2812(spi, [[0,0,0]]*nLED)
     
+    def usage():
+        print("usage: python ws2812-spi.py [-t] [-n] [-c], where -t or --test - run test with first 8 diodes in different colors, -c + -n - bright up first n diodes with given color, for example python ws2812.py -n 3 -c [100,100,0] "
     
     try:
         opts, args = getopt.getopt(sys.argv[1:], "hn:c:t", ["help", "color=", "test"])
@@ -118,6 +120,7 @@ if __name__=="__main__":
             nLED=int(a)
         elif o in ("-t", "--test"):
             doTest=True
+        else:
             assert False, "unhandled option"
 
     spi = spidev.SpiDev()
@@ -125,8 +128,9 @@ if __name__=="__main__":
 
     if color!=None:
         write2812(spi, eval(color)*nLED)
+           
     elif doTest:
-        test_fixed(spi, nLED)
+        test_fixed(spi)
     else:
         usage()
 
