@@ -84,15 +84,21 @@ if __name__=="__main__":
     import getopt
     import sys
 
-    def test_fixed(spi):
+    def test_fixed(spi, nLED):
         #write fixed pattern for 8 LEDs
         #This will send the following colors:
         #   Red, Green, Blue,
         #   Purple, Cyan, Yellow,
-        #   Black(off), White 
-        write2812(spi, [[10,0,0], [0,10,0], [0,0,10],
-                        [0,10,10], [10,0,10], [10,10,0],
-                        [0,0,0], [10,10,10]])
+        #   Black(off), White
+        leds = [[0,0,0]]*nLED
+        
+        for i in range nLED: 
+            leds[i][0] = rand(255)
+            leds[i][1] = rand(255)
+            leds[i][2] = rand(255)
+        
+        write2812(spi, leds)
+        
     def test_off(spi, nLED=8):
         #switch all nLED chips OFF.
         write2812(spi, [[0,0,0]]*nLED)
@@ -130,7 +136,7 @@ if __name__=="__main__":
         write2812(spi, eval(color)*nLED)
            
     elif doTest:
-        test_fixed(spi)
+        test_fixed(spi, nLED)
     else:
         usage()
 
