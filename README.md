@@ -36,17 +36,17 @@ make
 make install
 ```
 
-# Testing this ws2812.py module #
-This module can be tested using:
-    python ws2812.py
+
 
 
 Sample program that uses the module:
 ```
-import spidev
+
 import ws2812
-spi = spidev.SpiDev()
-spi.open(0,0)
+m = Matrix2812()
+leds = [[10,0,0], [0,10,0], [0,0,10], [10, 10, 0]]
+m.ws2812(leds)
+
 
 #write 4 WS2812's, with the following colors: red, green, blue, yellow
 ws2812.write2812(spi, [[10,0,0], [0,10,0], [0,0,10], [10, 10, 0]])
@@ -57,6 +57,26 @@ Note: this module tries to use numpy, if available.
 Without numpy it still works, but is *really* slow (more than a second
 to update 300 LED's on a Raspberry Pi Zero).
 So, if possible, do:
+
+
 ```
-sudo apt install python-numpy
+
+sudo apt install python3-pip
+sudo apt install libatlas3-base
+sudo pip3 install numpy
+
+
+
 ```
+
+
+TODO: 
+
+1. увеличить размер буфера
+https://www.raspberrypi.org/forums/viewtopic.php?t=39384
+https://stackoverflow.com/questions/16427996/increase-spi-buffer-size-in-raspbian
+https://raspberrypi.stackexchange.com/questions/65595/spi-transfer-fails-with-buffer-size-greater-than-4096
+2. сложности с установкой numpy на rpi zero
+
+3. работа с матрицей, подбор таймингов
+
