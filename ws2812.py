@@ -18,12 +18,16 @@ T0H: 0.35   -> 2p=0.31  3p=0.47
 T0L: 0.80   -> 6p=0.94  5p=0.78
 T1H: 0.70   -> 4p=0.625 5p=0.78
 T1L: 0.60   -> 4p=0.625 3p=0.47
+
 """
 
-def write2812_numpy8(spi,data):
-    d=numpy.array(data).ravel()
-    tx=numpy.zeros(len(d)*8, dtype=numpy.uint8)
-    for ibit in range(8):
+class Matrix2812:
+
+
+    def write2812_numpy8(spi,data):
+        d=numpy.array(data).ravel()
+        tx=numpy.zeros(len(d)*8, dtype=numpy.uint8)
+        for ibit in range(8):
         #print ibit
         #print ((d>>ibit)&1)
         #tx[7-ibit::8]=((d>>ibit)&1)*0x18 + 0xE0   #0->3/5, 1-> 5/3 
