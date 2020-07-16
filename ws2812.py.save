@@ -1,17 +1,15 @@
 #!/usr/bin/python
 
 import time
-import math
 
 NumpyImported=False
 try:
-    #i=2
-    import numpy 
-    from numpy import sin, cos, pi
-    NumpyImported=True
-    print("numpy is ok")
+    i=2
+    #import numpy
+    #from numpy import sin, cos, pi
+    #NumpyImported=True
 except ImportError:
-    print("Warning: no numpy found, routines will be slow")
+    #print("Warning: no numpy found, routines will be slow")
     pass
 """
 T0H: 0.35   -> 2p=0.31  3p=0.47
@@ -36,7 +34,6 @@ def write2812_numpy8(spi,data):
     
 def write2812_numpy4(spi,data):
     #print spi
-    print("numpy4")
     d=numpy.array(data).ravel()
     tx=numpy.zeros(len(d)*4, dtype=numpy.uint8)
     for ibit in range(4):
@@ -45,11 +42,11 @@ def write2812_numpy4(spi,data):
         tx[3-ibit::4]=((d>>(2*ibit+1))&1)*0x60 + ((d>>(2*ibit+0))&1)*0x06 +  0x88
         #print [hex(v) for v in tx]
     #print [hex(v) for v in tx]
-    #not working on zero  spi.xfer3(tx.tolist(), int(4/1.25e-6)) #works, on Zero (initially didn't?)
-    #not working on zero spi.xfer3(tx.tolist(), int(4/1.20e-6))  #works, no flashes on Zero, Works on Raspberry 3
-    #not working on zero spi.xfer3(tx.tolist(), int(4/1.15e-6))  #works, no flashes on Zero
-    #spi.xfer3(tx.tolist(), int(4/1.05e-6))  #works, no flashes on Zero
-    spi.xfer3(tx.tolist(), int(4/.95e-6))  #works, no flashes on Zero
+    spi.xfer(tx.tolist(), int(4/1.25e-6)) #works, on Zero (initially didn't?)
+    #spi.xfer(tx.tolist(), int(4/1.20e-6))  #works, no flashes on Zero, Works on Raspberry 3
+    #spi.xfer(tx.tolist(), int(4/1.15e-6))  #works, no flashes on Zero
+    #spi.xfer(tx.tolist(), int(4/1.05e-6))  #works, no flashes on Zero
+    #spi.xfer(tx.tolist(), int(4/.95e-6))  #works, no flashes on Zero
     #spi.xfer(tx.tolist(), int(4/.90e-6))  #works, no flashes on Zero
     #spi.xfer(tx.tolist(), int(4/.85e-6))  #doesn't work (first 4 LEDS work, others have flashing colors)
     #spi.xfer(tx.tolist(), int(4/.65e-6))  #doesn't work on Zero; Works on Raspberry 3
@@ -93,18 +90,6 @@ if __name__=="__main__":
     import getopt
     import sys
 
-
-    color_light_green = [30, 30, 0]
-    color_orange= [20, 90, 0]
-    color_yellow = [20,60, 0] 
-    color_black  = [0,0,0]
-    color_pink = [0, 30, 30]
-    color_red = [0, 30, 0]
-    color_green = [30, 0, 0]
-    color_blue = [0, 0, 30]
-
-
-
     def i(x,y):
         if x < 0: 
             print("x<0")
@@ -125,321 +110,28 @@ if __name__=="__main__":
 
 
     def drawverticalline(leds, x, y, len, color):
-        #print(x)
-        #print(y)
-        #print(len)
-        #print(color)
+        print(x)
+        print(y)
+        print(len)
+        print(color)
         for j in range (len): 
             leds[i(x, y+j)] = color #leds[i(0,0)] #color
-        #print("linever")
-        #print(leds)
+        print("line")
+        print(leds)
         return leds
 
 
     def drawhorizontalline(leds, x, y, len, color):
-        #print(x)
-        #print(y)
-        #print(len)
-        #print(color)
+        print(x)
+        print(y)
+        print(len)
+        print(color)
         for j in range (len): 
             leds[i(x+j, y)] = color #leds[i(0,0)] #color
-        #print("linehor")
-        #print(leds)
-        return leds
-    
-    def clear(leds ):
-       leds = [color_black]*8*64
-       return leds        
-
-       return leds
-
-    def drawrect(leds, x,y, width, height, color):
-        for j in range (width):
-            leds = drawverticalline(leds, x+j, y, height, color)
-        
+        print("line")
+        print(leds)
         return leds
 
-    def draw_let_a(leds, x, y, color):
-        
-#    """
-#
-#
-#
-#     xxx x
-#    x   xx
-#    x    x
-#    x   xx
-#     xxx xx 
-#    """
-
-        leds[i(x+1,y+4)] = color
-        #leds[i(x+2,y+4)] = color
-        leds[i(x+2,y+4)] = color
-        leds[i(x+4,y+4)] = color
-
-        leds[i(x+0,y+3)] = color
-        leds[i(x+4,y+3)] = color
-        leds[i(x+3,y+3)] = color
-
-        leds[i(x+0,y+2)] = color
-        leds[i(x+4,y+2)] = color
-
-        leds[i(x+0,y+1)] = color
-        leds[i(x+3,y+1)] = color
-        leds[i(x+4,y+1)] = color
-
-        leds[i(x+1,y+0)] = color
-        #leds[i(x+2,y+0)] = color
-        leds[i(x+2,y+0)] = color
-        leds[i(x+4,y+0)] = color
-
-        return leds
-
-    def draw_let_b(leds, x, y, color):
-        
-#'''
-#x
-#x
-#x
-#x xxx
-#xx   x
-#x    x
-#xx   x
-#x xxx
-#'''
-
-        leds[i(x,y+7)] = color
-        leds[i(x,y+6)] = color
-        leds[i(x,y+5)] = color
-        
-        leds[i(x,y+4)] = color
-
-        leds[i(x+2,y+4)] = color
-        #leds[i(x+3,y+4)] = color
-        leds[i(x+3,y+4)] = color
-
-        leds[i(x,y+3)] = color
-        leds[i(x+1,y+3)] = color
-        leds[i(x+4,y+3)] = color
-        
-        leds[i(x,y+2)] = color
-        leds[i(x+4,y+2)] = color
-
-
-        leds[i(x,y+1)] = color
-        leds[i(x+1,y+1)] = color
-        leds[i(x+4,y+1)] = color
-
-        leds[i(x+0,y+0)] = color
-        leds[i(x+2,y+0)] = color
-        #leds[i(x+3,y+0)] = color
-        leds[i(x+3,y+0)] = color
-
-        return leds         
-
-    def draw_let_c(leds, x, y, color):
-        
-#'''
-#
-#
-#
-# xxxxx
-#x
-#x
-#x
-# xxxxx
-#'''
-
-        leds[i(x+1,y+4)] = color
-        leds[i(x+2,y+4)] = color
-        leds[i(x+3,y+4)] = color
-        #leds[i(x+5,y+3)] = color
-        leds[i(x+4,y+4)] = color
-
-        leds[i(x,y+3)] = color
-
-        leds[i(x,y+2)] = color
-
-        leds[i(x,y+1)] = color
-
-        leds[i(x+1,y+0)] = color
-        leds[i(x+2,y+0)] = color
-        leds[i(x+3,y+0)] = color
-        leds[i(x+4,y+0)] = color
-
-
-        return leds
-
-
-    def draw_let_d(leds, x, y, color):
-        
-#'''
-#x
-#x
-#x
-#x xxx
-#xx   x
-#x    x
-#xx   x
-#x xxx
-#'''
-        leds[i(x+5,y+7)] = color
-        leds[i(x+5,y+6)] = color
-        leds[i(x+5,y+5)] = color
-
-        leds[i(x+5,y+4)] = color
-
-        leds[i(x+3,y+4)] = color
-        leds[i(x+2,y+4)] = color
-        leds[i(x+1,y+4)] = color
-
-        leds[i(x+5,y+3)] = color
-        leds[i(x+4,y+4)] = color
-        leds[i(x+0,y+3)] = color
-
-        leds[i(x,y+2)] = color
-        leds[i(x+5,y+2)] = color
-
-        leds[i(x,y+1)] = color
-        leds[i(x+4,y+0)] = color
-        leds[i(x+5,y+1)] = color
-
-        leds[i(x+5,y+0)] = color
-        leds[i(x+3,y+0)] = color
-        leds[i(x+4,y+0)] = color
-        leds[i(x+1,y+0)] = color
-
-        return leds
-
-    def draw_let_n(leds, x, y, color):
-#'''
-#
-#
-#
-#x xx
-#xx  x
-#x   x
-#x   x
-#x   x
-#'''
-        leds[i(x+0,y+4)] = color
-        leds[i(x+2,y+4)] = color
-        leds[i(x+3,y+4)] = color
-
-        leds[i(x+0,y+3)] = color
-        leds[i(x+1,y+3)] = color
-
-        leds[i(x+0,y+2)] = color
-        leds[i(x+0,y+1)] = color
-        leds[i(x+0,y+0)] = color
-        leds[i(x+4,y+2)] = color
-        leds[i(x+4,y+1)] = color
-        leds[i(x+4,y+0)] = color
-
-        return leds         
-
-
-    def draw_let_r(leds, x, y, color):
-#'''
-#
-#
-#
-#  xxx
-# x
-#x
-#x
-#x
-#'''
-        leds[i(x+2,y+4)] = color
-        leds[i(x+3,y+4)] = color
-        leds[i(x+4,y+4)] = color
-
-        leds[i(x+1,y+3)] = color
-
-        leds[i(x+0,y+2)] = color
-        leds[i(x+0,y+1)] = color
-        leds[i(x+0,y+0)] = color
-
-        return leds         
-
-
-    def draw_let_i(leds, x, y, color):
-#'''
-#
-#  x
-#
-#  xx
-#  x
-#  x
-#  x
-#  xx
-#'''
-        leds[i(x+2,y+6)] = color
-        leds[i(x+2,y+4)] = color
-        leds[i(x+3,y+4)] = color
-
-        leds[i(x+2,y+3)] = color
-
-        leds[i(x+2,y+2)] = color
-        leds[i(x+2,y+1)] = color
-        leds[i(x+2,y+0)] = color
-
-        leds[i(x+3,y+0)] = color
-
-        return leds         
-
-
-    def draw_let_p(leds, x, y, color):
-#'''
-#xxxx
-#x   x
-#x   x
-#x   x
-#xxxx
-#x
-#x
-#x
-#'''
-        leds[i(x+0,y+7)] = color
-        leds[i(x+1,y+7)] = color
-        leds[i(x+2,y+7)] = color
-        leds[i(x+3,y+7)] = color
-
-        leds[i(x+0,y+6)] = color
-        leds[i(x+4,y+6)] = color
-
-        leds[i(x+0,y+5)] = color
-        leds[i(x+4,y+5)] = color
-
-        leds[i(x+0,y+4)] = color
-        leds[i(x+4,y+4)] = color
-
-        leds[i(x+0,y+3)] = color
-        leds[i(x+1,y+3)] = color
-        leds[i(x+2,y+3)] = color
-        leds[i(x+3,y+3)] = color
-
-        leds[i(x+0,y+2)] = color
-
-        leds[i(x+0,y+1)] = color
-        leds[i(x+0,y+0)] = color
-
-        return leds         
-
-
-
-    def sine(leds, t):
-       f = round(math.cos(t/10)*100)
-       f = (f+100)/2
-
-       print(f)
-       #a1 = f*leds
-       #a2 = numpy.true_divide(a1, 100)
-       a2 = numpy.multiply(leds, f/100)
-       #print(a2)
-       leds2 = numpy.around(a2, 0).astype(numpy.uint8)
-       #print(leds2)
-       return leds2 
 
     def shift_right(leds):
         '''
@@ -462,12 +154,12 @@ if __name__=="__main__":
         15 < 16 
 
         '''
-        for i in range(54*8, -1, -1):
+        for i in range(55*8):
             x = i // 8
             y = i % 8 
             #if x%2:
             #leds[55*8-1 - i] = 
-            leds[ (i+16 -1 - 2*y)] = leds[ i] 
+            leds[50*8-1 - (i+16 -1 - 2*y)] = leds[50*8-1 - i] 
             #else:
             #    leds[i] = leds[i+8]
         return leds
@@ -494,7 +186,7 @@ if __name__=="__main__":
         15 < 16 
         
         '''
-        for i in range(55*8):
+        for i in range(55*8, -1, -1):
             x = i // 8
             y = i % 8 
             #if x%2:
@@ -503,122 +195,32 @@ if __name__=="__main__":
             #    leds[i] = leds[i+8]
         return leds
 
-    def taxi_mode(spi):
-        print("taxi_mode")
- #       leds = [color_black]*8*64
-
-        #color_orange = [40, 150, 0]
-        #color_black  = [0,0,0]
-        leds = [color_black]*8*64
-
-
-        i = 0
-        while True:
-            i = i+1
-            if i%2: 
-                color_1 = color_black
-                color_2 = color_orange
-                
-            else:
-                color_2 = color_black
-                color_1 = color_orange
-                 
- 
-           
-#        color_1 = color_black
-#        color_2 = color_orange
-
-       	    leds = drawhorizontalline(leds,0, 0, 4, color_1)
-            leds = drawhorizontalline(leds,0, 1, 4, color_1)
-            leds = drawhorizontalline(leds,0, 2, 4, color_1)
-            leds = drawhorizontalline(leds,0, 3, 4, color_1)
-            leds = drawhorizontalline(leds,0, 4, 4, color_2)
-            leds = drawhorizontalline(leds,0, 5, 4, color_2)
-            leds = drawhorizontalline(leds,0, 6, 4, color_2)
-            leds = drawhorizontalline(leds,0, 7, 4, color_2)
-
-
-            leds = drawhorizontalline(leds,4, 0, 4, color_2)
-            leds = drawhorizontalline(leds,4, 1, 4, color_2)
-            leds = drawhorizontalline(leds,4, 2, 4, color_2)
-            leds = drawhorizontalline(leds,4, 3, 4, color_2)
-            leds = drawhorizontalline(leds,4, 4, 4, color_1)
-            leds = drawhorizontalline(leds,4, 5, 4, color_1)
-            leds = drawhorizontalline(leds,4, 6, 4, color_1)
-            leds = drawhorizontalline(leds,4, 7, 4, color_1)
-
-            leds = drawhorizontalline(leds,8, 0, 4, color_1)
-            leds = drawhorizontalline(leds,8, 1, 4, color_1)
-            leds = drawhorizontalline(leds,8, 2, 4, color_1)
-            leds = drawhorizontalline(leds,8, 3, 4, color_1)
-            leds = drawhorizontalline(leds,8, 4, 4, color_2)
-            leds = drawhorizontalline(leds,8, 5, 4, color_2)
-            leds = drawhorizontalline(leds,8, 6, 4, color_2)
-            leds = drawhorizontalline(leds,8, 7, 4, color_2)
-	
-	
-            leds = drawhorizontalline(leds,12, 0, 4, color_2)
-            leds = drawhorizontalline(leds,12, 1, 4, color_2)
-            leds = drawhorizontalline(leds,12, 2, 4, color_2)
-            leds = drawhorizontalline(leds,12, 3, 4, color_2)
-            leds = drawhorizontalline(leds,12, 4, 4, color_1)
-            leds = drawhorizontalline(leds,12, 5, 4, color_1)
-            leds = drawhorizontalline(leds,12, 6, 4, color_1)
-            leds = drawhorizontalline(leds,12, 7, 4, color_1)
-	
-            leds = drawhorizontalline(leds,16, 0, 4, color_1)
-            leds = drawhorizontalline(leds,16, 1, 4, color_1)
-            leds = drawhorizontalline(leds,16, 2, 4, color_1)
-            leds = drawhorizontalline(leds,16, 3, 4, color_1)
-            leds = drawhorizontalline(leds,16, 4, 4, color_2)
-            leds = drawhorizontalline(leds,16, 5, 4, color_2)
-            leds = drawhorizontalline(leds,16, 6, 4, color_2)
-            leds = drawhorizontalline(leds,16, 7, 4, color_2)
-	
-            leds = drawhorizontalline(leds,20, 0, 4, color_2)
-            leds = drawhorizontalline(leds,20, 1, 4, color_2)
-            leds = drawhorizontalline(leds,20, 2, 4, color_2)
-            leds = drawhorizontalline(leds,20, 3, 4, color_2)
-            leds = drawhorizontalline(leds,20, 4, 4, color_1)
-            leds = drawhorizontalline(leds,20, 5, 4, color_1)
-            leds = drawhorizontalline(leds,20, 6, 4, color_1)
-            leds = drawhorizontalline(leds,20, 7, 4, color_1)
-	
-            leds = drawhorizontalline(leds,24, 0, 4, color_1)
-            leds = drawhorizontalline(leds,24, 1, 4, color_1)
-            leds = drawhorizontalline(leds,24, 2, 4, color_1)
-            leds = drawhorizontalline(leds,24, 3, 4, color_1)
-            leds = drawhorizontalline(leds,24, 4, 4, color_2)
-            leds = drawhorizontalline(leds,24, 5, 4, color_2)
-            leds = drawhorizontalline(leds,24, 6, 4, color_2)
-            leds = drawhorizontalline(leds,24, 7, 4, color_2)
-	
-            leds = drawhorizontalline(leds,28, 0, 4, color_2)
-            leds = drawhorizontalline(leds,28, 1, 4, color_2)
-            leds = drawhorizontalline(leds,28, 2, 4, color_2)
-            leds = drawhorizontalline(leds,28, 3, 4, color_2)
-            leds = drawhorizontalline(leds,28, 4, 4, color_1)
-            leds = drawhorizontalline(leds,28, 5, 4, color_1)
-            leds = drawhorizontalline(leds,28, 6, 4, color_1)
-            leds = drawhorizontalline(leds,28, 7, 4, color_1)
-            write2812(spi, leds)
-            time.sleep(0.5)
-
-
-
-
-                
-
-
 
 
     def test_turn_light_left(spi):
         print("turn light lefT")
+        color_orange = [30, 30, 0]
+        color_black  = [0,0,0]
+        color_pink = [0, 30, 30]
+        color_red = [0, 30, 0]
+        color_green = [30, 0, 0]
+        color_blue = [0, 0, 30]
         leds = [color_black]*8*64
 
-        #print(leds)
+        print(leds)
         write2812(spi, leds)
 
+        #leds[i(3,3)] = color_orange
+        #leds[i(4,3)] = color_orange
+        #leds[i(5, 3)] = [30, 30, 0]
+        #leds[i(6,3)] = [30, 30, 0]
+        #leds[i(7, 3)] = [30, 30, 0]
+        #leds[i(8,3)] = color_orange
+        #leds[i(9, 3)] = color_orange
+        #leds[i(10, 3)] = color_orange
+        #leds[i(11,3)] = color_orange
+        #leds[i(12,3)] = color_orange
+        #leds[i(13,3)] = color_orange
 
         leds = drawhorizontalline(leds, 3, 4, 11, color_orange)   
         leds = drawhorizontalline(leds, 3, 5, 11, color_orange)   
@@ -628,12 +230,48 @@ if __name__=="__main__":
         leds = drawverticalline(leds, 18, 1, 5, color_blue)   
 
 
-        #print(leds)
+        print(leds)
 
         write2812(spi, leds)
 
-        time.sleep(2)
+        time.sleep(5)
 
+        #time.sleep(0.2) 
+
+        #leds[i(2,3)] = color_orange
+        #leds[i(13,3)] = [0, 0, 0]
+        #write2812(spi, leds)
+        #time.sleep(0.2)
+
+        #leds[i(1,3)] = color_orange
+        #leds[i(12,3)] = [0, 0, 0]
+        #write2812(spi, leds)
+        #time.sleep(0.2)
+
+        #leds[i(0,3)] = color_orange
+        #leds[i(11,3)] = [0, 0, 0]
+        #write2812(spi, leds)
+        #time.sleep(0.2)
+
+        #leds[2*8+3] = color_orange
+        #leds[i(10,3)] = [0, 0, 0]
+        #write2812(spi, leds)
+        #time.sleep(0.2)
+
+        #leds[2*8+3] = color_orange
+        #leds[i(9,3)] = [0, 0, 0]
+        #write2812(spi, leds)
+        #time.sleep(0.2)
+
+        #leds[2*8+3] = color_orange
+        #leds[i(8,3)] = [0, 0, 0]
+        #write2812(spi, leds)
+        #time.sleep(0.2)
+
+        #leds[2*8+3] = color_orange
+        #leds[i(7,3)] = [0, 0, 0]
+        #write2812(spi, leds)
+        #time.sleep(0.2)
 
         leds = shift_left(leds)
         #print(leds)
@@ -642,20 +280,20 @@ if __name__=="__main__":
 
         leds = shift_left(leds)
         write2812(spi, leds)
-        time.sleep(0.05)
+        time.sleep(1)
 
         leds = shift_left(leds)
         write2812(spi, leds)
-        time.sleep(0.05)
+        time.sleep(1)
 
 
         leds = shift_left(leds)
         write2812(spi, leds)
-        time.sleep(0.05)
+        time.sleep(1)
 
         leds = shift_left(leds)
         write2812(spi, leds)
-        time.sleep(0.05)
+        time.sleep(1)
 
 
         for i in range(4):
@@ -663,42 +301,15 @@ if __name__=="__main__":
             write2812(spi, leds) 
             time.sleep(0.1)
 
-        time.sleep(1)
+        time.sleep(10)
 
-        for i in range(5):
+        for i in range(10):
             leds = shift_right(leds)
             write2812(spi, leds) 
-            time.sleep(0.2)
-
-
-        leds = clear( leds)
-        write2812(spi, leds)
-        time.sleep(1)
-        
+            time.sleep(5)
 
 
 
-        leds = draw_let_p(leds, 0, 0, color_yellow)
-        leds = draw_let_a(leds, 6, 0, color_yellow)
-        leds = draw_let_r(leds, 12, 0, color_yellow)
-
-        leds = draw_let_b(leds, 18, 0, color_yellow)
-
-        leds = draw_let_i(leds, 22, 0, color_yellow)
-
-        leds = draw_let_n(leds, 27, 0, color_yellow)
-
-        write2812(spi, leds)
-
-
-        time.sleep(1) 
-
-        t = 0     
-        while True:
-            t = t +1.1
-            leds2 = sine(leds, t)
-            write2812(spi, leds2)
-            #time.sleep(.05)
 
 
 
@@ -976,7 +587,6 @@ if __name__=="__main__":
         test_fixed(spi)
     elif testTurnLightLeft:
         test_turn_light_left(spi)
-        #taxi_mode(spi)
     else:
         usage()
 
