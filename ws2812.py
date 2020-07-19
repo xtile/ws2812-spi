@@ -37,31 +37,39 @@ class Matrix2812:
     color_red = [0, 30, 0]
     color_green = [30, 0, 0]
     color_blue = [0, 0, 30]
-    spi = Null
-    
-    
-    
-    def __init__():
+    spi = None
+    leds = None
+
+
+ 
+
+
+
+    def __init__(this, nLEDs = 8):
         this.spi = spidev.SpiDev()
-        this.spi.open(0,0)    
+        this.spi.open(0,0)
+        #leds =  
+        thisleds = [this.color_black]*nLEDs
+
+    def getLeds(this):
+        return this.leds
 
 
-
-    def write2812_numpy8(data):
+    def write2812_numpy8(this, data):
         d=numpy.array(data).ravel()
         tx=numpy.zeros(len(d)*8, dtype=numpy.uint8)
         for ibit in range(8):
-        #print ibit
-        #print ((d>>ibit)&1)
-        #tx[7-ibit::8]=((d>>ibit)&1)*0x18 + 0xE0   #0->3/5, 1-> 5/3 
-        #tx[7-ibit::8]=((d>>ibit)&1)*0x38 + 0xC0   #0->2/6, 1-> 5/3
-        tx[7-ibit::8]=((d>>ibit)&1)*0x78 + 0x80    #0->1/7, 1-> 5/3
-        #print [hex(v) for v in tx]
-        #print [hex(v) for v in tx]
+            #print ibit
+            #print ((d>>ibit)&1)
+            #tx[7-ibit::8]=((d>>ibit)&1)*0x18 + 0xE0   #0->3/5, 1-> 5/3 
+            #tx[7-ibit::8]=((d>>ibit)&1)*0x38 + 0xC0   #0->2/6, 1-> 5/3
+            tx[7-ibit::8]=((d>>ibit)&1)*0x78 + 0x80    #0->1/7, 1-> 5/3
+            #print [hex(v) for v in tx]
+            #print [hex(v) for v in tx]
         this.spi.xfer(tx.tolist(), int(8/1.25e-6))
         #spi.xfer(tx.tolist(), int(8e6))
     
-    def write2812_numpy4(data):
+    def write2812_numpy4(this, data):
         #print spi
         print("numpy4")
         d=numpy.array(data).ravel()
@@ -85,7 +93,7 @@ class Matrix2812:
         #spi.xfer(tx.tolist(), int(4/.45e-6))  #doesn't work on Zero; Doesn't work on Raspberry 3
         #spi.xfer(tx.tolist(), int(8e6))
 
-    def write2812_pylist8( data):
+    def write2812_pylist8(this,  data):
         tx=[]
         for rgb in data:
             for byte in rgb: 
@@ -93,7 +101,7 @@ class Matrix2812:
                     tx.append(((byte>>ibit)&1)*0x78 + 0x80)
         this.spi.xfer(tx, int(8/1.25e-6))
 
-    def write2812_pylist4( data):
+    def write2812_pylist4(this,  data):
         print("pylist4")
         tx=[]
         for rgb in data:
@@ -149,7 +157,7 @@ class Matrix2812:
        leds = [color_black]*8*64
        return leds        
 
-       return leds
+       #return leds
 
     def drawrect(leds, x,y, width, height, color):
         for j in range (width):
@@ -603,7 +611,8 @@ class Matrix2812:
 
 def test_turn_light_left(m):
     print("turn light lefT")
-    leds = [color_black]*8*64
+    leds = m.getLeds() #[color_black]*8*64
+
 
     #print(leds)
     m.write2812( leds)
@@ -910,32 +919,29 @@ def test_fixed(m):
 
 
 		])
-		
-	m.write2812( leds)
-	
-def test_random(m):	
+
+    m.write2812( leds)
+
+def test_random(m, nLED):
     #   Black(off), White
     leds = [[0,0,0]]*nLED
-    
-    for i in range nLED: 
+
+    for i in range (nLED):
         leds[i][0] = rand(255)
         leds[i][1] = rand(255)
         leds[i][2] = rand(255)
-    
-	m.write2812( leds)
-    
-        
+
+    m.write2812( leds)
+
+
+
 def test_off(m, nLED=8):
     #switch all nLED chips OFF.
     m.write2812( [[0,0,0]]*nLED)
 
-    
+
 def usage():
-    print("usage: python ws2812-spi.py [-t] [-n] [-c], where -t or --test - run test with first 8 diodes in different colors, -c + -n - bright up first n diodes with given color, for example python ws2812.py -n 3 -c [100,100,0] "
-
-
-
-
+    print("usage: python ws2812-spi.py [-t] [-n] [-c], where -t or --test - run test with first 8 diodes in different colors, -c + -n - bright up first n diodes with given color, for example python ws2812.py -n 3 -c [100,100,0] ")
 
 def main():
     print("==========================================================")
@@ -943,9 +949,8 @@ def main():
     print("==========================================================")
     time.sleep(0.1)
 
-  
-    
-   
+
+
     try:
         opts, args = getopt.getopt(sys.argv[1:], "hn:c:t:l", ["help", "color=", "test", "lightturnleft"])
     except getopt.GetoptError as err:
@@ -976,7 +981,7 @@ def main():
             assert False, "unhandled option"
 
 
-    m = Matrix2812()
+    m = Matrix2812(8*64)
 
 
 
@@ -984,11 +989,10 @@ def main():
         m.write2812( eval(color)*nLED)
         print(color) 
         print(eval(color))
-           
     elif doTest:
-        m.test_fixed()
+        test_fixed(m)
     elif testTurnLightLeft:
-        m.test_turn_light_left()
+        test_turn_light_left(m)
         #m.taxi_mode()
     else:
         usage()
@@ -1000,4 +1004,4 @@ if __name__ == "__main__":
 
 
 
-  
+
