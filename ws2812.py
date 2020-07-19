@@ -56,6 +56,7 @@ class Matrix2812:
     color_red = [0, 30, 0]
     color_green = [30, 0, 0]
     color_blue = [0, 0, 30]
+    color_white = [150, 150, 150]
     spi = None
     leds = None
     _nLEDs = 0
@@ -717,6 +718,30 @@ class Matrix2812:
        this.write2812(leds2)
        #return leds2 
 
+
+    def regular_break(this):
+        this.drawrect(0, 0, 6, 8, this.color_red)
+        this.drawrect(26, 0, 6, 8, this.color_red)
+        this.write2812()
+
+    def emergency_break(this):
+
+        while True:
+            this.drawrect(0, 0, 6, 8, this.color_red)
+            this.drawrect(26, 0, 6, 8, this.color_red)
+            this.write2812()
+            time.sleep(0.1)
+            this.clear()
+            this.write2812()
+            time.sleep(0.01)
+
+
+    def drive_reverse(this):
+        this.drawrect(0, 0, 32, 3, this.color_white)
+        #this.drawrect(26, 0, 6, 8, this.color_red)
+        this.write2812()
+
+
     def taxi_flash(this ):
 
         this.drawrect(0,0,32, 8, this.color_orange)
@@ -787,7 +812,6 @@ class Matrix2812:
 
             this.leds[ (i+16 -1 - 2*y)] = this.leds[ i] 
 
-        #return leds
 
 
     def shift_left(this):
@@ -1242,7 +1266,9 @@ def main():
         #test_turn_light_left(m)
         #m.taxi_mode()
         #m.taxi_flash()
-        m.departure()
+        #m.departure()
+        #m.drive_reverse()
+        m.emergency_break()
     else:
         usage()
 
