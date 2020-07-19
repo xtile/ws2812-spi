@@ -27,6 +27,26 @@ T1L: 0.60   -> 4p=0.625 3p=0.47
 
 """
 
+def i( x,y):
+        if x < 0: 
+            print("x<0")
+            return
+        if x > 63: 
+            print("x>63")
+            return 
+        if y< 0:
+            print("y<0")
+            return 
+        if y > 8: 
+            print("y>8")
+            return 
+        if x%2:
+            return x*8 + y
+        else:
+            return x*8 + 7 -y
+
+
+
 class Matrix2812:
 
     color_light_green = [30, 30, 0]
@@ -39,6 +59,7 @@ class Matrix2812:
     color_blue = [0, 0, 30]
     spi = None
     leds = None
+    _nLEDs = 0
 
 
  
@@ -49,13 +70,15 @@ class Matrix2812:
         this.spi = spidev.SpiDev()
         this.spi.open(0,0)
         #leds =  
-        thisleds = [this.color_black]*nLEDs
+        this.leds = [this.color_black]*nLEDs
+        this._nLEDs = nLEDs
 
     def getLeds(this):
         return this.leds
 
 
-    def write2812_numpy8(this, data):
+    def write2812_numpy8(this):
+        data = this.leds
         d=numpy.array(data).ravel()
         tx=numpy.zeros(len(d)*8, dtype=numpy.uint8)
         for ibit in range(8):
@@ -69,15 +92,18 @@ class Matrix2812:
         this.spi.xfer(tx.tolist(), int(8/1.25e-6))
         #spi.xfer(tx.tolist(), int(8e6))
     
-    def write2812_numpy4(this, data):
+    def write2812_numpy4(this):
         #print spi
         print("numpy4")
+        data = this.leds
         d=numpy.array(data).ravel()
+        print(data)
         tx=numpy.zeros(len(d)*4, dtype=numpy.uint8)
         for ibit in range(4):
             #print ibit
             #print ((d>>(2*ibit))&1), ((d>>(2*ibit+1))&1)
             tx[3-ibit::4]=((d>>(2*ibit+1))&1)*0x60 + ((d>>(2*ibit+0))&1)*0x06 +  0x88
+            print(tx)
             #print [hex(v) for v in tx]
         #print [hex(v) for v in tx]
         #not working on zero  spi.xfer3(tx.tolist(), int(4/1.25e-6)) #works, on Zero (initially didn't?)
@@ -93,7 +119,8 @@ class Matrix2812:
         #spi.xfer(tx.tolist(), int(4/.45e-6))  #doesn't work on Zero; Doesn't work on Raspberry 3
         #spi.xfer(tx.tolist(), int(8e6))
 
-    def write2812_pylist8(this,  data):
+    def write2812_pylist8(this):
+        data = this.leds
         tx=[]
         for rgb in data:
             for byte in rgb: 
@@ -102,6 +129,7 @@ class Matrix2812:
         this.spi.xfer(tx, int(8/1.25e-6))
 
     def write2812_pylist4(this,  data):
+        data = this.leds
         print("pylist4")
         tx=[]
         for rgb in data:
@@ -121,7 +149,7 @@ class Matrix2812:
         write2812=write2812_pylist4  
         
         
-    def i(x,y):
+    def i(this, x,y):
         if x < 0: 
             print("x<0")
             return
@@ -140,33 +168,33 @@ class Matrix2812:
             return x*8 + 7 -y
 
 
-    def drawverticalline(leds, x, y, len, color):
+    def drawverticalline(this,  x, y, len, color):
         for j in range (len): 
-            leds[i(x, y+j)] = color #leds[i(0,0)] #color
+            this.leds[this.i(x, y+j)] = color #leds[i(0,0)] #color
         #print("linever")
-        return leds
+        #return leds
 
 
-    def drawhorizontalline(leds, x, y, len, color):
+    def drawhorizontalline(this,  x, y, len, color):
         for j in range (len): 
-            leds[i(x+j, y)] = color #leds[i(0,0)] #color
+            this.leds[this.i(x+j, y)] = color #leds[i(0,0)] #color
         #print("linehor")
-        return leds
+        #return leds
     
-    def clear(leds ):
-       leds = [color_black]*8*64
-       return leds        
+    def clear(this ):
+       this.leds = [this.color_black]*8*64
+       #return leds
 
        #return leds
 
-    def drawrect(leds, x,y, width, height, color):
+    def drawrect(this,  x,y, width, height, color):
         for j in range (width):
-            leds = drawverticalline(leds, x+j, y, height, color)
+            this.leds = this.drawverticalline(leds, x+j, y, height, color)
         
-        return leds          
+        #return leds          
 
 
-    def draw_let_a(leds, x, y, color):
+    def draw_let_a(this,  x, y, color):
         
 #    """
 #
@@ -179,30 +207,30 @@ class Matrix2812:
 #     xxx xx 
 #    """
 
-        leds[i(x+1,y+4)] = color
+        this.leds[i(x+1,y+4)] = color
         #leds[i(x+2,y+4)] = color
-        leds[i(x+2,y+4)] = color
-        leds[i(x+4,y+4)] = color
+        this.leds[i(x+2,y+4)] = color
+        this.leds[i(x+4,y+4)] = color
 
-        leds[i(x+0,y+3)] = color
-        leds[i(x+4,y+3)] = color
-        leds[i(x+3,y+3)] = color
+        this.leds[i(x+0,y+3)] = color
+        this.leds[i(x+4,y+3)] = color
+        this.leds[i(x+3,y+3)] = color
 
-        leds[i(x+0,y+2)] = color
-        leds[i(x+4,y+2)] = color
+        this.leds[i(x+0,y+2)] = color
+        this.leds[i(x+4,y+2)] = color
 
-        leds[i(x+0,y+1)] = color
-        leds[i(x+3,y+1)] = color
-        leds[i(x+4,y+1)] = color
+        this.leds[i(x+0,y+1)] = color
+        this.leds[i(x+3,y+1)] = color
+        this.leds[i(x+4,y+1)] = color
 
-        leds[i(x+1,y+0)] = color
+        this.leds[i(x+1,y+0)] = color
         #leds[i(x+2,y+0)] = color
-        leds[i(x+2,y+0)] = color
-        leds[i(x+4,y+0)] = color
+        this.leds[i(x+2,y+0)] = color
+        this.leds[i(x+4,y+0)] = color
 
-        return leds
+        #return leds
 
-    def draw_let_b(leds, x, y, color):
+    def draw_let_b(ths,  x, y, color):
         
 #'''
 #x
@@ -215,36 +243,35 @@ class Matrix2812:
 #x xxx
 #'''
 
-        leds[i(x,y+7)] = color
-        leds[i(x,y+6)] = color
-        leds[i(x,y+5)] = color
+        this.leds[i(x,y+7)] = color
+        this.leds[i(x,y+6)] = color
+        this.leds[i(x,y+5)] = color
         
-        leds[i(x,y+4)] = color
+        this.leds[i(x,y+4)] = color
 
-        leds[i(x+2,y+4)] = color
-        #leds[i(x+3,y+4)] = color
-        leds[i(x+3,y+4)] = color
+        this.leds[i(x+2,y+4)] = color
+        this.leds[i(x+3,y+4)] = color
 
-        leds[i(x,y+3)] = color
-        leds[i(x+1,y+3)] = color
+        this.leds[i(x,y+3)] = color
+        this.leds[i(x+1,y+3)] = color
         leds[i(x+4,y+3)] = color
         
-        leds[i(x,y+2)] = color
-        leds[i(x+4,y+2)] = color
+        this.leds[i(x,y+2)] = color
+        this.leds[i(x+4,y+2)] = color
 
 
-        leds[i(x,y+1)] = color
-        leds[i(x+1,y+1)] = color
-        leds[i(x+4,y+1)] = color
+        this.leds[i(x,y+1)] = color
+        this.leds[i(x+1,y+1)] = color
+        this.leds[i(x+4,y+1)] = color
 
-        leds[i(x+0,y+0)] = color
-        leds[i(x+2,y+0)] = color
+        this.leds[i(x+0,y+0)] = color
+        this.leds[i(x+2,y+0)] = color
         #leds[i(x+3,y+0)] = color
-        leds[i(x+3,y+0)] = color
+        this.leds[i(x+3,y+0)] = color
 
-        return leds         
+        return leds
 
-    def draw_let_c(leds, x, y, color):
+    def draw_let_c(this, leds, x, y, color):
         
 #'''
 #
@@ -278,7 +305,7 @@ class Matrix2812:
         return leds
 
 
-    def draw_let_d(leds, x, y, color):
+    def draw_let_d(this,  x, y, color):
         
 #'''
 #x
@@ -318,7 +345,7 @@ class Matrix2812:
 
         return leds
 
-    def draw_let_n(leds, x, y, color):
+    def draw_let_n(this,  x, y, color):
 #'''
 #
 #
@@ -346,7 +373,7 @@ class Matrix2812:
         return leds         
 
 
-    def draw_let_r(leds, x, y, color):
+    def draw_let_r(this,  x, y, color):
 #'''
 #
 #
@@ -370,7 +397,7 @@ class Matrix2812:
         return leds         
 
 
-    def draw_let_i(leds, x, y, color):
+    def draw_let_i(this,  x, y, color):
 #'''
 #
 #  x
@@ -396,7 +423,7 @@ class Matrix2812:
         return leds         
 
 
-    def draw_let_p(leds, x, y, color):
+    def draw_let_p(this,  x, y, color):
 #'''
 #xxxx
 #x   x
@@ -407,40 +434,40 @@ class Matrix2812:
 #x
 #x
 #'''
-        leds[i(x+0,y+7)] = color
-        leds[i(x+1,y+7)] = color
-        leds[i(x+2,y+7)] = color
-        leds[i(x+3,y+7)] = color
+        this.leds[i(x+0,y+7)] = color
+        this.leds[i(x+1,y+7)] = color
+        this.leds[i(x+2,y+7)] = color
+        this.leds[i(x+3,y+7)] = color
 
-        leds[i(x+0,y+6)] = color
-        leds[i(x+4,y+6)] = color
+        this.leds[i(x+0,y+6)] = color
+        this.leds[i(x+4,y+6)] = color
 
-        leds[i(x+0,y+5)] = color
-        leds[i(x+4,y+5)] = color
+        this.leds[i(x+0,y+5)] = color
+        this.leds[i(x+4,y+5)] = color
 
-        leds[i(x+0,y+4)] = color
-        leds[i(x+4,y+4)] = color
+        this.leds[i(x+0,y+4)] = color
+        this.leds[i(x+4,y+4)] = color
 
-        leds[i(x+0,y+3)] = color
-        leds[i(x+1,y+3)] = color
-        leds[i(x+2,y+3)] = color
-        leds[i(x+3,y+3)] = color
+        this.leds[i(x+0,y+3)] = color
+        this.leds[i(x+1,y+3)] = color
+        this.leds[i(x+2,y+3)] = color
+        this.leds[i(x+3,y+3)] = color
 
-        leds[i(x+0,y+2)] = color
+        this.leds[i(x+0,y+2)] = color
 
-        leds[i(x+0,y+1)] = color
-        leds[i(x+0,y+0)] = color
+        this.leds[i(x+0,y+1)] = color
+        this.leds[i(x+0,y+0)] = color
 
-        return leds         
-
-
+        #return leds         
 
 
-    def taxi_mode(spi):
+
+
+    def taxi_mode(this):
         print("taxi_mode")
 
 
-        leds = [color_black]*8*64
+        this.leds = [color_black]*8*64
 
 
         i = 0
@@ -455,26 +482,26 @@ class Matrix2812:
                 color_1 = color_orange
 
 
-       	    leds = drawhorizontalline(leds,0, 0, 4, color_1)
-            leds = drawhorizontalline(leds,0, 1, 4, color_1)
-            leds = drawhorizontalline(leds,0, 2, 4, color_1)
-            leds = drawhorizontalline(leds,0, 3, 4, color_1)
-            leds = drawhorizontalline(leds,0, 4, 4, color_2)
-            leds = drawhorizontalline(leds,0, 5, 4, color_2)
-            leds = drawhorizontalline(leds,0, 6, 4, color_2)
-            leds = drawhorizontalline(leds,0, 7, 4, color_2)
+       	    leds = this.drawhorizontalline(0, 0, 4, color_1)
+            leds = this.drawhorizontalline(0, 1, 4, color_1)
+            leds = this.drawhorizontalline(0, 2, 4, color_1)
+            leds = this.drawhorizontalline(0, 3, 4, color_1)
+            leds = this.drawhorizontalline(0, 4, 4, color_2)
+            leds = this.drawhorizontalline(0, 5, 4, color_2)
+            leds = this.drawhorizontalline(0, 6, 4, color_2)
+            leds = this.drawhorizontalline(0, 7, 4, color_2)
 
 
-            leds = drawhorizontalline(leds,4, 0, 4, color_2)
-            leds = drawhorizontalline(leds,4, 1, 4, color_2)
-            leds = drawhorizontalline(leds,4, 2, 4, color_2)
-            leds = drawhorizontalline(leds,4, 3, 4, color_2)
-            leds = drawhorizontalline(leds,4, 4, 4, color_1)
-            leds = drawhorizontalline(leds,4, 5, 4, color_1)
-            leds = drawhorizontalline(leds,4, 6, 4, color_1)
-            leds = drawhorizontalline(leds,4, 7, 4, color_1)
+            leds = drawhorizontalline(4, 0, 4, color_2)
+            leds = drawhorizontalline(4, 1, 4, color_2)
+            leds = drawhorizontalline(4, 2, 4, color_2)
+            leds = drawhorizontalline(4, 3, 4, color_2)
+            leds = drawhorizontalline(4, 4, 4, color_1)
+            leds = drawhorizontalline(4, 5, 4, color_1)
+            leds = drawhorizontalline(4, 6, 4, color_1)
+            leds = drawhorizontalline(4, 7, 4, color_1)
 
-            leds = drawhorizontalline(leds,8, 0, 4, color_1)
+            leds = drawhorizontalline(8, 0, 4, color_1)
             leds = drawhorizontalline(leds,8, 1, 4, color_1)
             leds = drawhorizontalline(leds,8, 2, 4, color_1)
             leds = drawhorizontalline(leds,8, 3, 4, color_1)
@@ -532,7 +559,7 @@ class Matrix2812:
             time.sleep(0.5)
 
 
-    def sine(leds, t):
+    def sine(this,  t):
        f = round(math.cos(t/10)*100)
        f = (f+100)/2
 
@@ -542,9 +569,10 @@ class Matrix2812:
 
        leds2 = numpy.around(a2, 0).astype(numpy.uint8)
 
-       return leds2 
+       this.leds = leds2
+       #return leds2 
 
-    def shift_right(leds):
+    def shift_right(this):
         '''
         0 < 15
         1 < 14
@@ -568,15 +596,13 @@ class Matrix2812:
         for i in range(54*8, -1, -1):
             x = i // 8
             y = i % 8 
-            #if x%2:
-            #leds[55*8-1 - i] = 
-            leds[ (i+16 -1 - 2*y)] = leds[ i] 
-            #else:
-            #    leds[i] = leds[i+8]
-        return leds
+
+            this.leds[ (i+16 -1 - 2*y)] = this.leds[ i] 
+
+        #return leds
 
 
-    def shift_left(leds):
+    def shift_left(this):
         '''
         0 < 15
         1 < 14
@@ -601,96 +627,98 @@ class Matrix2812:
             x = i // 8
             y = i % 8 
             #if x%2:
-            leds[i] = leds[i+16 -1 - 2*y]
+            this.leds[i] = this.leds[i+16 -1 - 2*y]
             #else:
             #    leds[i] = leds[i+8]
-        return leds
+        #return leds
 
 # enfof Matrix2812
 
 
 def test_turn_light_left(m):
     print("turn light lefT")
-    leds = m.getLeds() #[color_black]*8*64
+    m.clear()
+    #leds = m.getLeds() #[color_black]*8*64
 
 
     #print(leds)
-    m.write2812( leds)
+    m.write2812( )
 
 
-    leds = drawhorizontalline(leds, 3, 4, 11, color_orange)   
-    leds = drawhorizontalline(leds, 3, 5, 11, color_orange)   
-    leds = drawhorizontalline(leds, 3, 6, 11, color_orange)   
+     
+    m.drawhorizontalline( 3, 4, 11, m.color_orange)   
+    m.drawhorizontalline( 3, 5, 11, m.color_orange)   
+    m.drawhorizontalline( 3, 6, 11, m.color_orange)   
 
-    leds = drawverticalline(leds, 15, 0, 8, color_red)   
-    leds = drawverticalline(leds, 18, 1, 5, color_blue)   
+    m.drawverticalline( 15, 0, 8, m.color_red)
+    m.drawverticalline( 18, 1, 5, m.color_blue)
 
 
 
-    m.write2812( leds)
+    m.write2812( )
 
     time.sleep(2)
 
 
-    leds = shift_left(leds)
+    m.shift_left()
     #print(leds)
-    write2812( leds)
+    m.write2812( )
     time.sleep(1)
 
-    leds = shift_left(leds)
-    m.write2812( leds)
+    m.shift_left()
+    m.write2812( )
     time.sleep(0.05)
 
-    leds = shift_left(leds)
-    m.write2812(spi, leds)
+    m.shift_left()
+    m.write2812()
     time.sleep(0.05)
 
 
-    leds = shift_left(leds)
-    m.write2812(spi, leds)
+    m.shift_left()
+    m.write2812()
     time.sleep(0.05)
 
-    leds = shift_left(leds)
-    m.write2812(spi, leds)
+    leds = m.shift_left()
+    m.write2812()
     time.sleep(0.05)
 
 
     for i in range(4):
-        leds = shift_left(leds)
-        m.write2812(spi, leds) 
+        leds = m.shift_left()
+        m.write2812() 
         time.sleep(0.1)
 
     time.sleep(1)
 
     for i in range(5):
-        leds = shift_right(leds)
-        m.write2812(spi, leds) 
+        leds = m.shift_right()
+        m.write2812() 
         time.sleep(0.2)
 
 
-    leds = clear( leds)
-    m.write2812(spi, leds)
+    m.clear()
+    m.write2812()
     time.sleep(1)
     
 
 
 
-    leds = draw_let_p(leds, 0, 0, color_yellow)
-    leds = draw_let_a(leds, 6, 0, color_yellow)
-    leds = draw_let_r(leds, 12, 0, color_yellow)
+    leds = m.draw_let_p( 0, 0, m.color_yellow)
+    leds = m.draw_let_a( 6, 0, m.color_yellow)
+    leds = m.draw_let_r( 12, 0, m.color_yellow)
 
-    leds = draw_let_b(leds, 18, 0, color_yellow)
+    leds = m.draw_let_b( 18, 0, m.color_yellow)
 
-    leds = draw_let_i(leds, 22, 0, color_yellow)
+    leds = draw_let_i( 22, 0, m.color_yellow)
 
-    leds = draw_let_n(leds, 27, 0, color_yellow)
+    leds = draw_let_n( 27, 0, m.color_yellow)
 
     m.write2812( leds)
 
 
-    time.sleep(1) 
+    time.sleep(1)
 
-    t = 0     
+    t = 0
     while True:
         t = t +1.1
         leds2 = sine(leds, t)
