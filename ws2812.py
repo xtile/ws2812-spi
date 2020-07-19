@@ -228,9 +228,44 @@ class Matrix2812:
         this.leds[i(x+2,y+0)] = color
         this.leds[i(x+4,y+0)] = color
 
-        #return leds
 
-    #i=2
+
+    def draw_let_e(this,  x, y, color):
+        
+#    """
+#
+#
+#
+#     xxx
+#    x   x
+#    xxxx
+#    x
+#     xxxx
+#    """
+
+        this.leds[i(x+1,y+4)] = color
+        #leds[i(x+2,y+4)] = color
+        this.leds[i(x+2,y+4)] = color
+        this.leds[i(x+3,y+4)] = color
+
+        this.leds[i(x+0,y+3)] = color
+        this.leds[i(x+4,y+3)] = color
+        #this.leds[i(x+3,y+3)] = color
+
+        this.leds[i(x+0,y+2)] = color
+        this.leds[i(x+1,y+2)] = color
+        this.leds[i(x+2,y+2)] = color
+        this.leds[i(x+3,y+2)] = color
+
+        this.leds[i(x+0,y+1)] = color
+        #this.leds[i(x+3,y+1)] = color
+        #this.leds[i(x+4,y+1)] = color
+
+        this.leds[i(x+1,y+0)] = color
+        this.leds[i(x+2,y+0)] = color
+        this.leds[i(x+3,y+0)] = color
+        this.leds[i(x+4,y+0)] = color
+
 
 
     def draw_let_b(this,  x, y, color):
@@ -433,7 +468,7 @@ class Matrix2812:
 #
 #
 #
-#  xxx
+#  xx
 # x
 #x
 #x
@@ -441,7 +476,7 @@ class Matrix2812:
 #'''
         this.leds[i(x+2,y+4)] = color
         this.leds[i(x+3,y+4)] = color
-        this.leds[i(x+4,y+4)] = color
+        #this.leds[i(x+4,y+4)] = color
 
         this.leds[i(x+1,y+3)] = color
 
@@ -452,6 +487,32 @@ class Matrix2812:
         this.leds[i(x+0,y+0)] = color
 
         #return leds         
+    def draw_let_t(this,  x, y, color):
+#'''
+# x
+# x
+# x
+#xxxx
+# x
+# x
+# x
+#  xx
+#'''
+        this.leds[i(x+1,y+7)] = color
+        this.leds[i(x+1,y+6)] = color
+        this.leds[i(x+1,y+5)] = color
+     
+        this.leds[i(x+0,y+4)] = color
+        this.leds[i(x+1,y+4)] = color
+        this.leds[i(x+2,y+4)] = color
+        this.leds[i(x+3,y+4)] = color
+
+        this.leds[i(x+1,y+3)] = color
+        this.leds[i(x+1,y+2)] = color
+        this.leds[i(x+1,y+1)] = color
+
+        this.leds[i(x+2,y+0)] = color
+        this.leds[i(x+3,y+0)] = color
 
 
     def draw_let_i(this,  x, y, color):
@@ -481,6 +542,36 @@ class Matrix2812:
 
 
     def draw_let_p(this,  x, y, color):
+#'''
+#xxx
+#x  x
+#x  x
+#xxx
+#x
+#x
+#
+#'''
+        this.leds[i(x+0,y+4)] = color
+        this.leds[i(x+1,y+4)] = color
+        this.leds[i(x+2,y+4)] = color
+        #this.leds[i(x+3,y+7)] = color
+
+        this.leds[i(x+0,y+3)] = color
+        this.leds[i(x+3,y+3)] = color
+
+        this.leds[i(x+0,y+2)] = color
+        this.leds[i(x+3,y+2)] = color
+
+        this.leds[i(x+0,y+1)] = color
+        this.leds[i(x+1,y+1)] = color
+        this.leds[i(x+2,y+1)] = color
+
+        this.leds[i(x+0,y+0)] = color
+
+
+
+
+    def draw_let_P(this,  x, y, color):
 #'''
 #xxxx
 #x   x
@@ -515,7 +606,48 @@ class Matrix2812:
         this.leds[i(x+0,y+1)] = color
         this.leds[i(x+0,y+0)] = color
 
+
         #return leds         
+    def draw_let_D(this,  x, y, color):
+#'''
+#xxx
+#x  x
+#x   x
+#x   x
+#x   x
+#x   x
+#x   x
+#xxxx
+#'''
+        this.leds[i(x+0,y+7)] = color
+        this.leds[i(x+1,y+7)] = color
+        this.leds[i(x+2,y+7)] = color
+        #this.leds[i(x+3,y+7)] = color
+
+        this.leds[i(x+0,y+6)] = color
+        this.leds[i(x+3,y+6)] = color
+
+        this.leds[i(x+0,y+5)] = color
+        this.leds[i(x+4,y+5)] = color
+
+        this.leds[i(x+0,y+4)] = color
+        this.leds[i(x+4,y+4)] = color
+
+        this.leds[i(x+0,y+3)] = color
+        this.leds[i(x+4,y+3)] = color
+
+        this.leds[i(x+0,y+2)] = color
+        this.leds[i(x+4,y+2)] = color
+
+        this.leds[i(x+0,y+1)] = color
+        this.leds[i(x+4,y+1)] = color
+
+        this.leds[i(x+0,y+0)] = color
+        this.leds[i(x+1,y+0)] = color
+        this.leds[i(x+2,y+0)] = color
+        this.leds[i(x+3,y+0)] = color
+        #this.leds[i(x+4,y+0)] = color
+
 
 
 
@@ -688,6 +820,32 @@ class Matrix2812:
             #    leds[i] = leds[i+8]
         #return leds
 
+
+    def departure(this):
+        leds = this.draw_let_D( 0, 0, this.color_yellow)
+        leds = this.draw_let_e( 6, 0, this.color_yellow)
+        leds = this.draw_let_p( 12, 0, this.color_yellow)
+
+        leds = this.draw_let_a( 17, 0, this.color_yellow)
+
+        leds = this.draw_let_r( 22, 0, this.color_yellow)
+
+        leds = this.draw_let_t( 27, 0, this.color_yellow)
+
+        this.write2812( )
+
+
+        time.sleep(1)
+
+        t = 0
+        while True:
+            t = t +1.5
+            #leds2 = 
+            this.sine( t)
+            #time.sleep(0.1)
+            #m.write2812( )
+
+
 # enfof Matrix2812
 
 
@@ -781,6 +939,9 @@ def test_turn_light_left(m):
         m.sine( t)
         time.sleep(1)
         #m.write2812( )
+
+
+
 
 
 def test_fixed(m):
@@ -1080,7 +1241,8 @@ def main():
     elif testTurnLightLeft:
         #test_turn_light_left(m)
         #m.taxi_mode()
-        m.taxi_flash()
+        #m.taxi_flash()
+        m.departure()
     else:
         usage()
 
