@@ -11,7 +11,6 @@ import sys
 
 NumpyImported=False
 try:
-    #i=2
     import numpy 
     from numpy import sin, cos, pi
     NumpyImported=True
@@ -231,6 +230,9 @@ class Matrix2812:
 
         #return leds
 
+    #i=2
+
+
     def draw_let_b(this,  x, y, color):
         
 #'''
@@ -272,17 +274,69 @@ class Matrix2812:
 
         #return leds
 
+    #i=2
+
+
+
+    def draw_let_k(this,  x, y, color):
+        
+#'''
+#x
+#x
+#x
+#x  xx
+#x x
+#xx
+#x x
+#x  xx
+#'''
+
+        this.leds[i(x,y+7)] = color
+        this.leds[i(x,y+6)] = color
+        this.leds[i(x,y+5)] = color
+        
+        this.leds[i(x,y+4)] = color
+
+        this.leds[i(x+4,y+4)] = color
+        this.leds[i(x+3,y+4)] = color
+
+        this.leds[i(x,y+3)] = color
+        this.leds[i(x+2,y+3)] = color
+        
+        #this.leds[i(x+4,y+2)] = color
+        
+        this.leds[i(x,y+2)] = color
+        this.leds[i(x+1,y+2)] = color
+
+
+        this.leds[i(x,y+1)] = color
+        this.leds[i(x+2,y+1)] = color
+        #this.leds[i(x+4,y+1)] = color
+
+        this.leds[i(x+0,y+0)] = color
+        this.leds[i(x+3,y+0)] = color
+        #leds[i(x+3,y+0)] = color
+        this.leds[i(x+4,y+0)] = color
+
+        #return leds
+
+    #i=2
+
+
+
+
+
     def draw_let_c(this,  x, y, color):
         
 #'''
 #
 #
 #
-# xxxxx
+# xxxx
 #x
 #x
 #x
-# xxxxx
+# xxxx
 #'''
 
         this.leds[i(x+1,y+4)] = color
@@ -391,6 +445,8 @@ class Matrix2812:
 
         this.leds[i(x+1,y+3)] = color
 
+        this.leds[i(x+0,y+4)] = color
+        this.leds[i(x+0,y+3)] = color
         this.leds[i(x+0,y+2)] = color
         this.leds[i(x+0,y+1)] = color
         this.leds[i(x+0,y+0)] = color
@@ -484,96 +540,33 @@ class Matrix2812:
                 color_1 = this.color_orange
 
 
-#       	    leds = this.drawhorizontalline(0, 0, 4, color_1)
-#            leds = this.drawhorizontalline(0, 1, 4, color_1)
-#            leds = this.drawhorizontalline(0, 2, 4, color_1)
-#            leds = this.drawhorizontalline(0, 3, 4, color_1)
             
             this.drawrect(0,0,4, 4, color_1)
             this.drawrect(0,4,4, 4, color_2)
-#            leds = this.drawhorizontalline(0, 4, 4, color_2)
-#            leds = this.drawhorizontalline(0, 5, 4, color_2)
-#            leds = this.drawhorizontalline(0, 6, 4, color_2)
-#            leds = this.drawhorizontalline(0, 7, 4, color_2)
 
 
             this.drawrect(4,0,4, 4, color_2)
             this.drawrect(4,4,4, 4, color_1)
-#            leds = drawhorizontalline(4, 0, 4, color_2)
-#            leds = drawhorizontalline(4, 1, 4, color_2)
-#            leds = drawhorizontalline(4, 2, 4, color_2)
-#            leds = drawhorizontalline(4, 3, 4, color_2)
-#            leds = drawhorizontalline(4, 4, 4, color_1)
-#            leds = drawhorizontalline(4, 5, 4, color_1)
-#            leds = drawhorizontalline(4, 6, 4, color_1)
-#            leds = drawhorizontalline(4, 7, 4, color_1)
 
             this.drawrect(8,0,4, 4, color_1)
             this.drawrect(8,4,4, 4, color_2)
-#            leds = drawhorizontalline(8, 0, 4, color_1)
-#            leds = drawhorizontalline(leds,8, 1, 4, color_1)
-#            leds = drawhorizontalline(leds,8, 2, 4, color_1)
-#            leds = drawhorizontalline(leds,8, 3, 4, color_1)
-#            leds = drawhorizontalline(leds,8, 4, 4, color_2)
-#            leds = drawhorizontalline(leds,8, 5, 4, color_2)
-#            leds = drawhorizontalline(leds,8, 6, 4, color_2)
-#            leds = drawhorizontalline(leds,8, 7, 4, color_2)
 	
 	
             this.drawrect(12,0,4, 4, color_2)
             this.drawrect(12,4,4, 4, color_1)
-#            leds = drawhorizontalline(leds,12, 0, 4, color_2)
-#            leds = drawhorizontalline(leds,12, 1, 4, color_2)
-#            leds = drawhorizontalline(leds,12, 2, 4, color_2)
-#            leds = drawhorizontalline(leds,12, 3, 4, color_2)
-#            leds = drawhorizontalline(leds,12, 4, 4, color_1)
-#            leds = drawhorizontalline(leds,12, 5, 4, color_1)
-#            leds = drawhorizontalline(leds,12, 6, 4, color_1)
-#            leds = drawhorizontalline(leds,12, 7, 4, color_1)
 	
             this.drawrect(16,0,4, 4, color_1)
             this.drawrect(16,4,4, 4, color_2)
-#            leds = drawhorizontalline(leds,16, 0, 4, color_1)
-#            leds = drawhorizontalline(leds,16, 1, 4, color_1)
-#            leds = drawhorizontalline(leds,16, 2, 4, color_1)
-#            leds = drawhorizontalline(leds,16, 3, 4, color_1)
-#            leds = drawhorizontalline(leds,16, 4, 4, color_2)
-#            leds = drawhorizontalline(leds,16, 5, 4, color_2)
-#            leds = drawhorizontalline(leds,16, 6, 4, color_2)
-#            leds = drawhorizontalline(leds,16, 7, 4, color_2)
 	
             this.drawrect(20,0,4, 4, color_2)
             this.drawrect(20,4,4, 4, color_1)
-#            leds = drawhorizontalline(leds,20, 0, 4, color_2)
-#            leds = drawhorizontalline(leds,20, 1, 4, color_2)
-#            leds = drawhorizontalline(leds,20, 2, 4, color_2)
-#            leds = drawhorizontalline(leds,20, 3, 4, color_2)
-#            leds = drawhorizontalline(leds,20, 4, 4, color_1)
-#            leds = drawhorizontalline(leds,20, 5, 4, color_1)
-#            leds = drawhorizontalline(leds,20, 6, 4, color_1)
-#            leds = drawhorizontalline(leds,20, 7, 4, color_1)
 	
             this.drawrect(24,0,4, 4, color_1)
             this.drawrect(24,4,4, 4, color_2)
-#            leds = drawhorizontalline(leds,24, 0, 4, color_1)
-#            leds = drawhorizontalline(leds,24, 1, 4, color_1)
-#            leds = drawhorizontalline(leds,24, 2, 4, color_1)
-#            leds = drawhorizontalline(leds,24, 3, 4, color_1)
-#            leds = drawhorizontalline(leds,24, 4, 4, color_2)
-#            leds = drawhorizontalline(leds,24, 5, 4, color_2)
-#            leds = drawhorizontalline(leds,24, 6, 4, color_2)
-#            leds = drawhorizontalline(leds,24, 7, 4, color_2)
 	
             this.drawrect(28,0,4, 4, color_2)
             this.drawrect(28,4,4, 4, color_1)
-#            leds = drawhorizontalline(leds,28, 0, 4, color_2)
-#            leds = drawhorizontalline(leds,28, 1, 4, color_2)
-#            leds = drawhorizontalline(leds,28, 2, 4, color_2)
-#            leds = drawhorizontalline(leds,28, 3, 4, color_2)
-#            leds = drawhorizontalline(leds,28, 4, 4, color_1)
-#            leds = drawhorizontalline(leds,28, 5, 4, color_1)
-#            leds = drawhorizontalline(leds,28, 6, 4, color_1)
-#            leds = drawhorizontalline(leds,28, 7, 4, color_1)
+
             this.write2812()
             time.sleep(1.5)
 
@@ -591,6 +584,49 @@ class Matrix2812:
        #this.leds = leds2
        this.write2812(leds2)
        #return leds2 
+
+    def taxi_flash(this ):
+
+        this.drawrect(0,0,32, 8, this.color_orange)
+
+
+        ind = 0
+        t=0
+        while True:
+           ind = ind + 1
+           t = t + 0.5 
+           #sine = math.sin(t/10)*50 + 50
+           #cosi = math.cos(t/10)*50 + 50
+           sine = abs(math.sin(t/10))*math.sin(t/10)*100 
+           if sine < 0:
+               sine = 0
+           cosi = -abs(math.sin(t/10))*math.sin(t/10)*100 
+           if cosi < 0:
+               cosi = 0
+           print(sine)
+           tt = numpy.ones((512,1)) #[1]*8*64
+
+           for k in range(8):
+               for j in range(32):
+                   if (j//4)%2 ==0:
+                       if k <4: 
+                           tt[i(j,k)] = sine
+                       else:
+                           tt[i(j,k)] = cosi
+                   else:
+                       if k <4: 
+                           tt[i(j,k)] = cosi
+                       else:
+                           tt[i(j,k)] = sine
+           #tt.reshape(512, 1)                       
+
+           temp = numpy.multiply(this.leds, tt/100)
+
+           temp2 = numpy.around(temp, 0).astype(numpy.uint8)
+
+           this.write2812(temp2)
+           #time.sleep(0.01)
+
 
     def shift_right(this):
         '''
@@ -727,7 +763,7 @@ def test_turn_light_left(m):
     leds = m.draw_let_a( 6, 0, m.color_yellow)
     leds = m.draw_let_r( 12, 0, m.color_yellow)
 
-    leds = m.draw_let_b( 18, 0, m.color_yellow)
+    leds = m.draw_let_k( 18, 0, m.color_yellow)
 
     leds = m.draw_let_i( 22, 0, m.color_yellow)
 
@@ -1043,7 +1079,8 @@ def main():
         test_fixed(m)
     elif testTurnLightLeft:
         #test_turn_light_left(m)
-        m.taxi_mode()
+        #m.taxi_mode()
+        m.taxi_flash()
     else:
         usage()
 
