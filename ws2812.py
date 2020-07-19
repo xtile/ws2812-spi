@@ -92,18 +92,19 @@ class Matrix2812:
         this.spi.xfer(tx.tolist(), int(8/1.25e-6))
         #spi.xfer(tx.tolist(), int(8e6))
     
-    def write2812_numpy4(this):
+    def write2812_numpy4(this, data = None):
         #print spi
         #print("numpy4")
-        data = this.leds
+        if data is None:
+             data = this.leds
         d=numpy.array(data).ravel()
-        #print(data)
+        print(data)
         tx=numpy.zeros(len(d)*4, dtype=numpy.uint8)
         for ibit in range(4):
             #print ibit
             #print ((d>>(2*ibit))&1), ((d>>(2*ibit+1))&1)
             tx[3-ibit::4]=((d>>(2*ibit+1))&1)*0x60 + ((d>>(2*ibit+0))&1)*0x06 +  0x88
-            print(tx)
+            #print(tx)
             #print [hex(v) for v in tx]
         #print [hex(v) for v in tx]
         #not working on zero  spi.xfer3(tx.tolist(), int(4/1.25e-6)) #works, on Zero (initially didn't?)
@@ -189,7 +190,7 @@ class Matrix2812:
 
     def drawrect(this,  x,y, width, height, color):
         for j in range (width):
-            this.leds = this.drawverticalline(leds, x+j, y, height, color)
+            this.drawverticalline( x+j, y, height, color)
         
         #return leds          
 
@@ -467,96 +468,114 @@ class Matrix2812:
         print("taxi_mode")
 
 
-        this.leds = [color_black]*8*64
+        #this.leds = [this.color_black]*8*64
+        this.clear()
 
 
         i = 0
         while True:
             i = i+1
             if i%2: 
-                color_1 = color_black
-                color_2 = color_orange
+                color_1 = this.color_black
+                color_2 = this.color_orange
                 
             else:
-                color_2 = color_black
-                color_1 = color_orange
+                color_2 = this.color_black
+                color_1 = this.color_orange
 
 
-       	    leds = this.drawhorizontalline(0, 0, 4, color_1)
-            leds = this.drawhorizontalline(0, 1, 4, color_1)
-            leds = this.drawhorizontalline(0, 2, 4, color_1)
-            leds = this.drawhorizontalline(0, 3, 4, color_1)
-            leds = this.drawhorizontalline(0, 4, 4, color_2)
-            leds = this.drawhorizontalline(0, 5, 4, color_2)
-            leds = this.drawhorizontalline(0, 6, 4, color_2)
-            leds = this.drawhorizontalline(0, 7, 4, color_2)
+#       	    leds = this.drawhorizontalline(0, 0, 4, color_1)
+#            leds = this.drawhorizontalline(0, 1, 4, color_1)
+#            leds = this.drawhorizontalline(0, 2, 4, color_1)
+#            leds = this.drawhorizontalline(0, 3, 4, color_1)
+            
+            this.drawrect(0,0,4, 4, color_1)
+            this.drawrect(0,4,4, 4, color_2)
+#            leds = this.drawhorizontalline(0, 4, 4, color_2)
+#            leds = this.drawhorizontalline(0, 5, 4, color_2)
+#            leds = this.drawhorizontalline(0, 6, 4, color_2)
+#            leds = this.drawhorizontalline(0, 7, 4, color_2)
 
 
-            leds = drawhorizontalline(4, 0, 4, color_2)
-            leds = drawhorizontalline(4, 1, 4, color_2)
-            leds = drawhorizontalline(4, 2, 4, color_2)
-            leds = drawhorizontalline(4, 3, 4, color_2)
-            leds = drawhorizontalline(4, 4, 4, color_1)
-            leds = drawhorizontalline(4, 5, 4, color_1)
-            leds = drawhorizontalline(4, 6, 4, color_1)
-            leds = drawhorizontalline(4, 7, 4, color_1)
+            this.drawrect(4,0,4, 4, color_2)
+            this.drawrect(4,4,4, 4, color_1)
+#            leds = drawhorizontalline(4, 0, 4, color_2)
+#            leds = drawhorizontalline(4, 1, 4, color_2)
+#            leds = drawhorizontalline(4, 2, 4, color_2)
+#            leds = drawhorizontalline(4, 3, 4, color_2)
+#            leds = drawhorizontalline(4, 4, 4, color_1)
+#            leds = drawhorizontalline(4, 5, 4, color_1)
+#            leds = drawhorizontalline(4, 6, 4, color_1)
+#            leds = drawhorizontalline(4, 7, 4, color_1)
 
-            leds = drawhorizontalline(8, 0, 4, color_1)
-            leds = drawhorizontalline(leds,8, 1, 4, color_1)
-            leds = drawhorizontalline(leds,8, 2, 4, color_1)
-            leds = drawhorizontalline(leds,8, 3, 4, color_1)
-            leds = drawhorizontalline(leds,8, 4, 4, color_2)
-            leds = drawhorizontalline(leds,8, 5, 4, color_2)
-            leds = drawhorizontalline(leds,8, 6, 4, color_2)
-            leds = drawhorizontalline(leds,8, 7, 4, color_2)
+            this.drawrect(8,0,4, 4, color_1)
+            this.drawrect(8,4,4, 4, color_2)
+#            leds = drawhorizontalline(8, 0, 4, color_1)
+#            leds = drawhorizontalline(leds,8, 1, 4, color_1)
+#            leds = drawhorizontalline(leds,8, 2, 4, color_1)
+#            leds = drawhorizontalline(leds,8, 3, 4, color_1)
+#            leds = drawhorizontalline(leds,8, 4, 4, color_2)
+#            leds = drawhorizontalline(leds,8, 5, 4, color_2)
+#            leds = drawhorizontalline(leds,8, 6, 4, color_2)
+#            leds = drawhorizontalline(leds,8, 7, 4, color_2)
 	
 	
-            leds = drawhorizontalline(leds,12, 0, 4, color_2)
-            leds = drawhorizontalline(leds,12, 1, 4, color_2)
-            leds = drawhorizontalline(leds,12, 2, 4, color_2)
-            leds = drawhorizontalline(leds,12, 3, 4, color_2)
-            leds = drawhorizontalline(leds,12, 4, 4, color_1)
-            leds = drawhorizontalline(leds,12, 5, 4, color_1)
-            leds = drawhorizontalline(leds,12, 6, 4, color_1)
-            leds = drawhorizontalline(leds,12, 7, 4, color_1)
+            this.drawrect(12,0,4, 4, color_2)
+            this.drawrect(12,4,4, 4, color_1)
+#            leds = drawhorizontalline(leds,12, 0, 4, color_2)
+#            leds = drawhorizontalline(leds,12, 1, 4, color_2)
+#            leds = drawhorizontalline(leds,12, 2, 4, color_2)
+#            leds = drawhorizontalline(leds,12, 3, 4, color_2)
+#            leds = drawhorizontalline(leds,12, 4, 4, color_1)
+#            leds = drawhorizontalline(leds,12, 5, 4, color_1)
+#            leds = drawhorizontalline(leds,12, 6, 4, color_1)
+#            leds = drawhorizontalline(leds,12, 7, 4, color_1)
 	
-            leds = drawhorizontalline(leds,16, 0, 4, color_1)
-            leds = drawhorizontalline(leds,16, 1, 4, color_1)
-            leds = drawhorizontalline(leds,16, 2, 4, color_1)
-            leds = drawhorizontalline(leds,16, 3, 4, color_1)
-            leds = drawhorizontalline(leds,16, 4, 4, color_2)
-            leds = drawhorizontalline(leds,16, 5, 4, color_2)
-            leds = drawhorizontalline(leds,16, 6, 4, color_2)
-            leds = drawhorizontalline(leds,16, 7, 4, color_2)
+            this.drawrect(16,0,4, 4, color_1)
+            this.drawrect(16,4,4, 4, color_2)
+#            leds = drawhorizontalline(leds,16, 0, 4, color_1)
+#            leds = drawhorizontalline(leds,16, 1, 4, color_1)
+#            leds = drawhorizontalline(leds,16, 2, 4, color_1)
+#            leds = drawhorizontalline(leds,16, 3, 4, color_1)
+#            leds = drawhorizontalline(leds,16, 4, 4, color_2)
+#            leds = drawhorizontalline(leds,16, 5, 4, color_2)
+#            leds = drawhorizontalline(leds,16, 6, 4, color_2)
+#            leds = drawhorizontalline(leds,16, 7, 4, color_2)
 	
-            leds = drawhorizontalline(leds,20, 0, 4, color_2)
-            leds = drawhorizontalline(leds,20, 1, 4, color_2)
-            leds = drawhorizontalline(leds,20, 2, 4, color_2)
-            leds = drawhorizontalline(leds,20, 3, 4, color_2)
-            leds = drawhorizontalline(leds,20, 4, 4, color_1)
-            leds = drawhorizontalline(leds,20, 5, 4, color_1)
-            leds = drawhorizontalline(leds,20, 6, 4, color_1)
-            leds = drawhorizontalline(leds,20, 7, 4, color_1)
+            this.drawrect(20,0,4, 4, color_2)
+            this.drawrect(20,4,4, 4, color_1)
+#            leds = drawhorizontalline(leds,20, 0, 4, color_2)
+#            leds = drawhorizontalline(leds,20, 1, 4, color_2)
+#            leds = drawhorizontalline(leds,20, 2, 4, color_2)
+#            leds = drawhorizontalline(leds,20, 3, 4, color_2)
+#            leds = drawhorizontalline(leds,20, 4, 4, color_1)
+#            leds = drawhorizontalline(leds,20, 5, 4, color_1)
+#            leds = drawhorizontalline(leds,20, 6, 4, color_1)
+#            leds = drawhorizontalline(leds,20, 7, 4, color_1)
 	
-            leds = drawhorizontalline(leds,24, 0, 4, color_1)
-            leds = drawhorizontalline(leds,24, 1, 4, color_1)
-            leds = drawhorizontalline(leds,24, 2, 4, color_1)
-            leds = drawhorizontalline(leds,24, 3, 4, color_1)
-            leds = drawhorizontalline(leds,24, 4, 4, color_2)
-            leds = drawhorizontalline(leds,24, 5, 4, color_2)
-            leds = drawhorizontalline(leds,24, 6, 4, color_2)
-            leds = drawhorizontalline(leds,24, 7, 4, color_2)
+            this.drawrect(24,0,4, 4, color_1)
+            this.drawrect(24,4,4, 4, color_2)
+#            leds = drawhorizontalline(leds,24, 0, 4, color_1)
+#            leds = drawhorizontalline(leds,24, 1, 4, color_1)
+#            leds = drawhorizontalline(leds,24, 2, 4, color_1)
+#            leds = drawhorizontalline(leds,24, 3, 4, color_1)
+#            leds = drawhorizontalline(leds,24, 4, 4, color_2)
+#            leds = drawhorizontalline(leds,24, 5, 4, color_2)
+#            leds = drawhorizontalline(leds,24, 6, 4, color_2)
+#            leds = drawhorizontalline(leds,24, 7, 4, color_2)
 	
-            leds = drawhorizontalline(leds,28, 0, 4, color_2)
-            leds = drawhorizontalline(leds,28, 1, 4, color_2)
-            leds = drawhorizontalline(leds,28, 2, 4, color_2)
-            leds = drawhorizontalline(leds,28, 3, 4, color_2)
-            leds = drawhorizontalline(leds,28, 4, 4, color_1)
-            leds = drawhorizontalline(leds,28, 5, 4, color_1)
-            leds = drawhorizontalline(leds,28, 6, 4, color_1)
-            leds = drawhorizontalline(leds,28, 7, 4, color_1)
-            write2812(spi, leds)
-            time.sleep(0.5)
+            this.drawrect(28,0,4, 4, color_2)
+            this.drawrect(28,4,4, 4, color_1)
+#            leds = drawhorizontalline(leds,28, 0, 4, color_2)
+#            leds = drawhorizontalline(leds,28, 1, 4, color_2)
+#            leds = drawhorizontalline(leds,28, 2, 4, color_2)
+#            leds = drawhorizontalline(leds,28, 3, 4, color_2)
+#            leds = drawhorizontalline(leds,28, 4, 4, color_1)
+#            leds = drawhorizontalline(leds,28, 5, 4, color_1)
+#            leds = drawhorizontalline(leds,28, 6, 4, color_1)
+#            leds = drawhorizontalline(leds,28, 7, 4, color_1)
+            this.write2812()
+            time.sleep(1.5)
 
 
     def sine(this,  t):
@@ -569,7 +588,8 @@ class Matrix2812:
 
        leds2 = numpy.around(a2, 0).astype(numpy.uint8)
 
-       this.leds = leds2
+       #this.leds = leds2
+       this.write2812(leds2)
        #return leds2 
 
     def shift_right(this):
@@ -723,7 +743,8 @@ def test_turn_light_left(m):
         t = t +1.1
         #leds2 = 
         m.sine( t)
-        m.write2812( )
+        time.sleep(1)
+        #m.write2812( )
 
 
 def test_fixed(m):
@@ -1021,8 +1042,8 @@ def main():
     elif doTest:
         test_fixed(m)
     elif testTurnLightLeft:
-        test_turn_light_left(m)
-        #m.taxi_mode()
+        #test_turn_light_left(m)
+        m.taxi_mode()
     else:
         usage()
 
