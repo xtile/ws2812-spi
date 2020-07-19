@@ -76,7 +76,20 @@ TODO:
 https://www.raspberrypi.org/forums/viewtopic.php?t=39384
 https://stackoverflow.com/questions/16427996/increase-spi-buffer-size-in-raspbian
 https://raspberrypi.stackexchange.com/questions/65595/spi-transfer-fails-with-buffer-size-greater-than-4096
-2. сложности с установкой numpy на rpi zero
+2. done
+
+
 
 3. работа с матрицей, подбор таймингов
 
+4. make changes to spidev
+
+add spidev.bufsiz=32768 to the line in /boot/cmdline.txt and reboot sometime
+test with cat /sys/module/spidev/parameters/bufsiz
+git clone https://github.com/doceme/py-spidev.git
+cd py-spidev/
+nano spidev_module.c
+change #define SPIDEV_MAXPATH 4096
+make PYTHON=python3
+sudo python3 setup.py install
+rm -rf py-spidev/
